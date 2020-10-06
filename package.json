@@ -1,0 +1,20 @@
+{
+  "name": "calavera-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "author": "Simon Wakenhut <simon@simonwakenhut.me>",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "keycloak-connect": "^11.0.2",
+    "kubernetes-client": "^9.0.0",
+    "ldapjs-client": "^0.1.1",
+    "md5": "^2.3.0"
+  }
+}
