@@ -65,7 +65,8 @@ async function addUser(cn, sn, mail, uid, password) {
         "organizationalPerson",
         "openprojectAdmin",
         "giteaAdmin"
-      ]
+      ],
+      employeeNumber: Math.floor(Math.random() * (9999999999999999999  - 2) ) + 2
     }
    
     await client.add('uid=' + uid + ',' + configInternal.usersDn, entry)
