@@ -24,6 +24,7 @@ app.use(keycloak.get().middleware())
 app.use(express.json())
 
 app.use('/user', require('./controller/user.js'))
+app.use('/users', require('./controller/users.js'))
 app.use('/editor', require('./controller/editor.js'))
 app.use('/services', require('./controller/services.js'))
 app.use('/config', require('./controller/config.js'))
