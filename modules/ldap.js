@@ -81,7 +81,7 @@ async function addUser(cn, sn, mail, uid, password) {
     await client.modify('cn=nx-admin,' + configInternal.groupsDn, change)
     await client.modify('cn=administrator,' + configInternal.groupsDn, change)
 
-    return { "status": "successfull" }
+    return { "status": "successful" }
   } catch (e) {
     console.log(e)
     return { "status": "failed" }
@@ -91,7 +91,7 @@ async function addUser(cn, sn, mail, uid, password) {
 async function deleteUser(uid) {
   try {
     await client.del('uid=' + uid + ',' + configInternal.usersDn)
-    return { "status": "successfull" }
+    return { "status": "successful" }
   } catch (e) {
     console.log(e)
     return { "status": "failed" }
@@ -108,7 +108,7 @@ async function changePassword(uid, password) {
     }
    
     await client.modify('uid=' + uid + ',' + configInternal.usersDn, change)
-    return { "status": "successfull" }
+    return { "status": "successful" }
   } catch (e) {
     console.log(e)
     return { "status": "failed" }

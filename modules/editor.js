@@ -37,7 +37,7 @@ async function createEditor(releaseName, user, password, namespace, entrypoint, 
     await kubernetes.client().api.v1.namespaces(namespace).service.post({ body: service })
     await kubernetes.client().apis['traefik.containo.us'].v1alpha1.namespaces(namespace).ingressroute.post({ body: ingressroute })
 
-    return { "status": "successfull" }
+    return { "status": "successful" }
   } catch (e) {
     if(e.code = "409") {
       console.log(e)
@@ -113,7 +113,7 @@ async function deleteEditor(releaseName, user, namespace, userNamespace) {
     errors.push(e.code)
   }
 
-  return { "status": "successfull", errors }
+  return { "status": "successful", errors }
 }
 
 async function getStatus(releaseName, user, namespace, domain, userNamespace) {
