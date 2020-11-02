@@ -1,0 +1,652 @@
+openapi: "3.0.3"
+info:
+  version: 1.0.0
+  title: Calavera REST API
+  description: This API supports the Dashboard of the Calavera Project
+security:
+  - BearerAuth: []
+paths:
+  /config:
+    get:
+      summary: Get the config
+      operationId: getConfig
+      tags:
+        - Config
+      responses:
+        '200':
+          description: A list of config attributes
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Config"
+        '401':
+          description: Unauthorized Errror
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unauthorized
+  /config/auth:
+    get:
+      summary: Get the authentication config
+      operationId: getAuthConfig
+      security: []
+      tags:
+        - Config
+      responses:
+        '200':
+          description: The current status of the editor
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/AuthenticationConfig"
+  /editor:
+    get:
+      summary: Get editor status
+      operationId: getEditorStatus
+      tags:
+        - Editor
+      responses:
+        '200':
+          description: A list of config attributes
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/EditorStatus"
+        '400':
+          description: Unspecified error
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/EditorStatus"
+              example:
+                status: failed
+        '401':
+          description: Unauthorized Errror
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unauthorized
+    put:
+      summary: Create a new editor
+      operationId: createEditor
+      tags:
+        - Editor
+      requestBody:
+        content:
+          application/json:    
+            schema:
+              $ref: "#/components/schemas/Password"
+      responses:
+        '200':
+          description: ""
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/EditorCreationStatus"
+              example:
+                status: successful
+        '401':
+          description: Unauthorized Errror
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unauthorized
+        '409':
+          description: An old editor instance is beeing deleted, please wait
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/EditorCreationStatus"
+              example:
+                status: waiting-for-deletion
+        '500':
+          description: Unspecified error
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/EditorCreationStatus"
+              example:
+                status: failed
+    delete:
+      summary: Delete the editor
+      operationId: deleteEditor
+      tags:
+        - Editor
+      responses:
+        '200':
+          description: Successful deletion of the editor
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/OperationStatus"
+              example:
+                status: successful
+        '401':
+          description: Unauthorized Errror
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unauthorized
+        '500':
+          description: Unspecified error
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/OperationStatus"
+              example:
+                status: failed
+  /editor/start:
+    post:
+      summary: Start the editor
+      operationId: startEditor
+      tags:
+        - Editor
+      responses:
+        '200':
+          description: ""
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/OperationStatus"
+        '400':
+          description: Unspecified error
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/OperationStatus"
+              example:
+                status: failed
+        '401':
+          description: Unauthorized Errror
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unauthorized
+  /editor/stop:
+    post:
+      summary: Stop the editor
+      operationId: stopEditor
+      tags:
+        - Editor
+      responses:
+        '200':
+          description: ""
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/OperationStatus"
+        '400':
+          description: Unspecified error
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/OperationStatus"
+              example:
+                status: failed
+        '401':
+          description: Unauthorized Errror
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unauthorized
+  /editor/password:
+    patch:
+      summary: Change the password of the editor
+      operationId: changeEditorPassword
+      tags:
+        - Editor
+      requestBody:
+        content:
+          application/json:    
+            schema:
+              $ref: "#/components/schemas/Password"
+      responses:
+        '200':
+          description: ""
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/OperationStatus"
+        '400':
+          description: Unspecified error
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/OperationStatus"
+              example:
+                status: failed
+        '401':
+          description: Unauthorized Errror
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unauthorized
+  /services:
+    get:
+      summary: Get the enabled services
+      operationId: getServices
+      tags:
+        - Services
+      responses:
+        '200':
+          description: Array of enabled services
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Services"
+              example:
+                - enabled: true
+                  name: GitLab
+                  logo: /gitlab-logo.png
+                  description: From project planning and source code management to CI/CD and monitoring, GitLab is a complete DevOps platform, delivered as a single application.
+                  link: https://gitlab.calavera.example.com
+                - enabled: true
+                  name: Gitea
+                  logo: /gitea-logo.png
+                  description: Gitea is a community managed lightweight code hosting solution written in Go. It is published under the MIT license.
+                  link: https://gitea.calavera.example.com
+                - enabled: true
+                  name: Jenkins
+                  logo: /jenkins-logo.png
+                  description: The leading open source automation server, Jenkins provides hundreds of plugins to support building, deploying and automating any project.
+                  link: https://jenkins.calavera.example.com
+                - enabled: true
+                  name: Mattermost
+                  logo: /mattermost-logo.png
+                  description: Mattermost is a flexible, open source messaging platform that enables secure team collaboration.
+                  link: https://mattermost.calavera.example.com
+                - enabled: true
+                  name: Nexus
+                  logo: /nexus-logo.png
+                  description: The free artifact repository with universal format support.
+                  link: https://nexus.calavera.example.com
+                - enabled: true
+                  name: OpenProject
+                  logo: /openproject-logo.png
+                  description: OpenProject is a web-based project management system for location-independent team collaboration.
+                  link: https://openproject.calavera.example.com
+                - enabled: true
+                  name: Keycloak
+                  logo: /keycloak-logo.png
+                  description: Keycloak is an open source Identity and Access Management solution aimed at modern applications and services.
+                  link: https://keycloak.calavera.example.com
+        '401':
+          description: Unauthorized Errror
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unauthorized
+  /user:
+    get:
+      summary: Get current user information
+      operationId: getCurrentUser
+      tags:
+        - User
+      responses:
+        '200':
+          description: ""
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/User"
+        '401':
+          description: Unauthorized Errror
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unauthorized
+    put:
+      summary: Create a user
+      operationId: createUser
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:    
+            schema:
+              $ref: "#/components/schemas/CreateUser"
+      responses:
+        '200':
+          description: Successful creation of a new user
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/OperationStatus"
+              example:
+                status: successful
+        '401':
+          description: Unauthorized Errror
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unauthorized
+        '400':
+          description: Unspecified error
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/OperationStatus"
+              example:
+                status: failed
+  /user/{uid}:
+    get:
+      summary: Get user information
+      operationId: getUser
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: User ID
+      responses:
+        '200':
+          description: ""
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/User"
+        '401':
+          description: Unauthorized Errror
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unauthorized
+    delete:
+      summary: Delete a user
+      operationId: deleteUser
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: User ID
+      responses:
+        '200':
+          description: ""
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/OperationStatus"
+        '400':
+          description: Status of the deletion
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/OperationStatus"
+              example:
+                status: failed
+        '401':
+          description: Unauthorized Errror
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unauthorized
+  /user/password:
+    patch:
+      summary: Change user password
+      operationId: changeUserPassword
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:    
+            schema:
+              $ref: "#/components/schemas/Password"
+      responses:
+        '200':
+          description: ""
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/OperationStatus"
+        '401':
+          description: Unauthorized Errror
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unauthorized
+  /users:
+    get:
+      summary: Get all user information
+      operationId: getAllUser
+      tags:
+        - User
+      responses:
+        '200':
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Users"
+        '401':
+          description: Unauthorized Errror
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unauthorized
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    Config:
+      type: object
+      properties:
+        enabled:
+          type: object
+          properties:
+            gitea:
+              type: boolean
+            gitlab:
+              type: boolean
+            openproject:
+              type: boolean
+            jenkins:
+              type: boolean
+            nexus:
+              type: boolean
+            mattermost:
+              type: boolean
+        domains:
+          type: object
+          properties:
+            base:
+              type: string
+              example: calavera.example.com
+            api:
+              type: string
+              example: api.calavera.example.com
+            dashboard:
+              type: string
+              example: dashboard.calavera.example.com
+            gitlab:
+              type: string
+              example: gitlab.calavera.example.com
+            gitea:
+              type: string
+              example: gitea.calavera.example.com
+            jenkins:
+              type: string
+              example: jenkins.calavera.example.com
+            mattermost:
+              type: string
+              example: mattermost.calavera.example.com
+            nexus:
+              type: string
+              example: nexus.calavera.example.com
+            openproject:
+              type: string
+              example: openproject.calavera.example.com
+            keycloak:
+              type: string
+              example: auth.calavera.example.com
+            editor:
+              type: string
+              example: editor.calavera.example.com
+        namespace:
+          type: string
+          example: calavera
+        userNamespace:
+          type: string
+          example: calavera-user
+        displayName:
+          type: string
+          example: Calavera
+        releaseName:
+          type: string
+          example: calavera
+        entrypoint:
+          type: string
+          example: websecure
+        certResolver:
+          type: string
+          example: production
+    AuthenticationConfig:
+      type: object
+      properties:
+        url:
+          type: string
+          example: https://auth.calavera.example.com/auth
+        realm:
+          type: string
+          example: calavera
+        clientId:
+          type: string
+          example: dashboard
+        onLoad:
+          type: string
+          example: login-required
+        checkLoginIframe:
+          type: boolean
+          example: false
+        flow:
+          type: string
+          example: implicit
+    EditorCreationStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - successful
+            - failed
+            - waiting-for-deletion
+    EditorStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - successful
+            - failed
+        editor:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+                - running
+                - stopped
+                - missing
+            link:
+              type: string
+              example: https://bcba.editor.calavera.example.com/
+    OperationStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - successful
+            - failed
+    Password:
+      type: object
+      properties:
+        password:
+          type: string
+          example: a-password
+    Services:
+      type: array
+      items:
+        type: object
+        properties:
+          enabled:
+            type: boolean
+          name:
+            type: string
+            example: GitLab
+          logo:
+            type: string
+            example: /gitlab-logo.png
+          description:
+            type: string
+            example: From project planning and source code management to CI/CD and monitoring, GitLab is a complete DevOps platform, delivered as a single application.
+          link: 
+            type: string
+            example: https://gitlab.calavera.exampke.com
+    User:
+      type: object
+      properties:
+        dn:
+          type: string
+          example: uid=max.mustermann,ou=users,dc=calavera
+        cn:
+          type: string
+          example: Max
+        sn:
+          type: string
+          example: Mustermann
+        mail:
+          type: string
+          example: max.mustermann@example.com
+        employeeNumber:
+          type: integer
+          example: 3
+        memberOf:
+          type: array
+          items:
+            type: string
+            example: cn=administrator,ou=groups,dc=calavera
+    Users:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
+    CreateUser:
+      type: object
+      properties:
+        firstname:
+          type: string
+          example: Max
+        lastname:
+          type: string
+          example: Mustermann
+        mail:
+          type: string
+          example: max.mustermann@example.com
+        uid:
+          type: string
+          example: max.mustermann
+        password:
+          type: string
+          example: a-password
